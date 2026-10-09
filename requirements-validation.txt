@@ -1,0 +1,6 @@
+# Lightweight repository checks and synthetic pure-function examples only.
+# This is not the training, geometry, or historical experiment environment.
+numpy
+pandas
+nbformat
+ipython

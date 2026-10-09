@@ -1,0 +1,14 @@
+# Observed ML imports; not an installation-tested or GPU-tested environment.
+# Install only in a separate ML environment after choosing compatible versions.
+-r requirements.txt
+torch
+torchvision
+torchsummary
+tensorflow
+fair-esm
+
+# fair-esm provides the legacy `esm` import used by the ESM2 notebooks.
+# The ESM3 exploratory notebook uses a different `esm` distribution/API.
+# ESM3 and its huggingface-hub dependency are intentionally NOT installed here.
+# Create a separate environment for ESM3; do not combine esm and fair-esm.
+# Pretrained weights and trained models are external resources, not repository files.

@@ -1,0 +1,17 @@
+# Base analysis and notebook tools, inferred from the released notebook sources.
+# This is not a tested scientific lockfile. Historical package versions are unknown.
+# Select and validate compatible versions before claiming full reproduction.
+numpy
+pandas
+scipy
+biopython
+scikit-learn
+matplotlib
+seaborn
+tqdm
+ipython
+ipywidgets
+jupyterlab
+nbformat
+
+# google.colab is supplied by the Colab runtime, not installed by this file.

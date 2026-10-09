@@ -1,0 +1,22 @@
+# Geometry/visualization imports and exploratory installation statements.
+# Native libraries and platform compatibility have NOT been verified.
+-r requirements.txt
+pywavefront
+ipyvolume
+pyvista
+trimesh
+rtree
+freesasa
+open3d
+
+# The `<2` restriction is present in original notebook installation cells.
+pyglet<2
+
+# Installed by one exploratory notebook cell; no direct ProDy import was found.
+ProDy
+
+# PyMesh is intentionally absent: the notebooks reference a separately obtained
+# pymesh2-0.3.1-cp310-cp310-linux_x86_64.whl, specific to CPython 3.10/Linux x86_64.
+# Do not replace it with an unrelated similarly named PyPI package.
+# PyMOL is also absent: original cells use apt-get python3-pymol or pymol.
+# These system/binary requirements need a separately documented compatible setup.
