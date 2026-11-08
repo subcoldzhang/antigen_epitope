@@ -12,7 +12,7 @@ This private repository is being prepared as a companion to a research paper. It
 | `step2_colab.ipynb` | Another structural feature-preparation variant; it is not a training entry point. |
 | `secondary_structure.ipynb` | Exploratory secondary-structure inspection and PDB visualization examples. |
 | `abdb_new_combine/` | SI-table preparation, ESM2 embeddings, an incomplete ESM3 alternative, classifier training, and evaluation. |
-| `abdb/`, `abdb_v2/`–`abdb_v5/`, `abdb_combine/`, `abdb_new_method/`, `sabdab/`, `YUHAO/`, and notebook-bearing subdirectories under `data/` | Preserved historical variants and supporting code; directory names alone do not identify the manuscript's final version. No research datasets are bundled under `data/`. |
+| `abdb/`, `abdb_v2/`–`abdb_v5/`, `abdb_combine/`, `abdb_new_method/`, `sabdab/`, `YUHAO/`, and notebook-bearing subdirectories under `data/` | Preserved historical variants and supporting code; directory names alone do not identify the manuscript's final version. Core data are distributed separately as Release assets; see [docs/DATA.md](docs/DATA.md). |
 | `tools/check_notebooks.py` | Notebook schema, transformed Python syntax, output/metadata hygiene, and heuristic credential checks without executing cells. |
 | `tools/smoke_test.py` | Data-free synthetic checks of selected functions extracted from `abdb_new_combine` notebooks. |
 | `requirements-validation*.txt` | Dependencies for repository checks only. |
@@ -22,8 +22,11 @@ This private repository is being prepared as a companion to a research paper. It
 | [docs/VALIDATION.md](docs/VALIDATION.md) | Recorded checks, their exact scope, and remaining verification limits. |
 | [docs/CURATION.md](docs/CURATION.md) | Publication cleanup, exclusions, and source-preservation decisions. |
 | [docs/SOURCE_MANIFEST.json](docs/SOURCE_MANIFEST.json) | Source inventory and provenance mapping. |
+| [docs/DATA.md](docs/DATA.md) | Core-data Release downloads, scope, file checksums, fold membership, and known gaps. |
 
-Notebook outputs, package caches, research datasets, prepared structures, meshes, embeddings, model weights, and generated results are excluded. Parameter values remain in the research source. The repository does not bundle a training dataset or a trained predictor.
+Research data are distributed through GitHub Releases rather than stored in Git history. Notebook outputs, package caches, mesh files, NPY tensors, model weights, and generated results remain excluded from this core-data snapshot. Parameter values remain in the research source; a complete training package and trained predictor are not supplied.
+
+**Data update — 2026-11-08:** The [core-data Release](https://github.com/subcoldzhang/antigen_epitope/releases/tag/data-core-2026-11-08) provides one archive, `core-experiment-inputs.tar.gz`: **1,261 files, 1,205,977,471 uncompressed bytes, and 277,243,644 compressed bytes**. It contains 1,151 PDB files under `abdb_v3/pdb/`, 36 existing non-OBJ files under `abdb_new_combine/data/`, and 74 direct text/CSV inputs from the five `abdb_v4` folds. Historical SAbDab PDB/TSV/CSV files under the root `data/` directory and the approximately 80 GB mesh collection are outside this release. See [the data guide](docs/DATA.md), [per-file SHA-256 manifest](docs/DATA_FILES.tsv), and [fold-membership manifest](docs/DATA_FOLD_MEMBERSHIP.tsv). The source `abdb_v4/fold_2/data/` directory is empty and the required training CSV is missing; these gaps have not been filled by reconstructed data. Uploading the existing files does not establish end-to-end reproduction.
 
 ## Start with the data-free checks
 
@@ -75,11 +78,11 @@ The historical PyMesh wheel named in the notebooks targets **CPython 3.10 / Linu
 
 ## Prepare external data and select a workflow
 
-Keep research resources in a working directory outside the Git checkout. Edit path assignments in a working copy of the selected notebook to point there; the preserved notebooks do not automatically read environment variables or a configuration file.
+Download and verify `core-experiment-inputs.tar.gz` using [docs/DATA.md](docs/DATA.md), then extract it into a working directory outside the Git checkout. Edit path assignments in a working copy of the selected notebook to point there; the preserved notebooks do not automatically read environment variables or a configuration file.
 
 Data sources differ by research version. The root preprocessing notebooks reference SAbDab metadata and corresponding PDB structures; their legacy source URL now redirects to the [SAbDab2 search page](https://sabdab.opig.stats.ox.ac.uk/search/?all=true). The exact historical snapshot is unknown. Separately, the original [abdb_v2/README.txt](abdb_v2/README.txt) identifies [AbDb](http://www.abybank.org/abdb/) and the selection note **“Kabat ==> NR”** as the PDB source for that version. The AbDb link timed out during preparation, so its present download availability was not verified. Neither reference identifies a complete versioned reproduction dataset.
 
-Obtain the author-approved resources for the selected version separately and record acquisition dates, identifiers, and checksums. Prepared SI tables, fold definitions, patch lists, and trained classifier weights additionally require author-supplied provenance and acquisition instructions; no public download location has been established for them.
+The private core-data Release supplies the existing files listed in its manifests, including prepared tables and selected fold inputs. Confirm which files belong to the selected manuscript workflow, retain their checksums, and obtain any missing inputs and matching classifier weights separately. The snapshot does not establish the original acquisition dates, completeness, or scientific validity of the fold construction.
 
 Two useful places to inspect are:
 
@@ -96,7 +99,7 @@ jupyter lab abdb_new_combine/step2.ipynb
 
 JupyterLab and the research dependencies are not installed by the validation requirements. In Colab, review the original Drive-mount and installation cells for the chosen runtime. **Do not use “Run all” as a reproduction command:** notebooks contain alternative branches, repeated writes, data/model downloads, and—in some variants—directory deletion. Follow the [stage-by-stage guide](docs/REPRODUCIBILITY.md#reviewed-workflows), supply missing inputs, and execute only the intended cells in an independent working copy.
 
-Structural preparation produces selected-complex/antigen PDB files, surface meshes, and residue TSVs containing coordinates, secondary structure, relative SASA, contact indicators, and optional SI. The reviewed ESM2 path adds 320 embedding columns; the classifier path consumes prepared residue patches and writes a Keras `.h5` model. Evaluation prints metrics/plots and can export prediction-colored PDBs. These outputs are generated externally and are not included in this repository.
+Structural preparation produces selected-complex/antigen PDB files, surface meshes, and residue TSVs containing coordinates, secondary structure, relative SASA, contact indicators, and optional SI. The reviewed ESM2 path adds 320 embedding columns; the classifier path consumes prepared residue patches and writes a Keras `.h5` model. Evaluation prints metrics/plots and can export prediction-colored PDBs. Some existing structures and prepared tables are preserved in the core-data Release; meshes, weights, and generated evaluation results are outside its scope. New outputs should remain in the external working directory.
 
 ## Reproduction status and publication checklist
 

@@ -4,7 +4,9 @@ This guide documents the source behavior reviewed during repository preparation 
 
 Use [PARAMETERS.md](PARAMETERS.md) to locate embedded research settings, [CURATION.md](CURATION.md) for packaging decisions, [VALIDATION.md](VALIDATION.md) for the recorded checks, and [SOURCE_MANIFEST.json](SOURCE_MANIFEST.json) for source provenance. The parameter index is documentation only; it is not a shared configuration or a selection of manuscript defaults.
 
-The release contains code, parameter choices, and documentation. Research inputs, model weights, notebook outputs, and generated scientific products are intentionally absent. No training dataset, pretrained model, or scientific result was downloaded or regenerated as part of the lightweight verification described below.
+The initial release contained code, parameter choices, and documentation, with research inputs and generated products excluded. No training dataset, pretrained model, or scientific result was downloaded or regenerated as part of the lightweight verification described below.
+
+**Data update — 2026-11-08:** The [core-data Release](https://github.com/subcoldzhang/antigen_epitope/releases/tag/data-core-2026-11-08) provides one archive, `core-experiment-inputs.tar.gz`, containing 1,261 existing files (1,205,977,471 uncompressed bytes; 277,243,644 compressed bytes). Its scope is 1,151 PDB files under `abdb_v3/pdb/`, 36 non-OBJ files under `abdb_new_combine/data/`, and 74 direct text/CSV inputs from the five `abdb_v4` folds. Historical SAbDab PDB/TSV/CSV files under the root `data/` directory, the approximately 80 GB mesh collection, NPY tensors, trained weights, and generated results are excluded. See [DATA.md](DATA.md) for extraction instructions, [DATA_FILES.tsv](DATA_FILES.tsv) for the 1,261 per-file SHA-256 records, and [DATA_FOLD_MEMBERSHIP.tsv](DATA_FOLD_MEMBERSHIP.tsv) for 4,834 preserved fold-directory memberships. The source `abdb_v4/fold_2/data/` directory is empty and the required training CSV is missing; neither has been reconstructed. Full experiment reproduction remains unverified.
 
 ## Verified scope
 
@@ -14,7 +16,7 @@ The release contains code, parameter choices, and documentation. Research inputs
 | Dependency consistency | `python -m pip check` passed in that environment. |
 | Synthetic function smoke test | 6 extracted definitions / 22 cases passed: two B-factor averaging functions, one status aggregation function, and three normalization functions. No complete notebook cell was executed. |
 | Notebook inspection | Source was reviewed for inputs, writes, dependencies, parameters, and alternative branches. `tools/check_notebooks.py` provides repeatable schema, syntax, and hygiene checks on the release tree. |
-| Real structure processing, PyMOL/PyMesh geometry, ESM inference | Not verified. External resources and compatible research environments were not supplied for execution. |
+| Real structure processing, PyMOL/PyMesh geometry, ESM inference | Not verified. External resources and compatible research environments were not supplied for the initial validation; the later data upload does not verify execution. |
 | Training, model loading, evaluation, manuscript reproduction | Not verified. No experiment-success or metric claim is made. |
 
 The lightweight commands are:
@@ -65,7 +67,7 @@ These are examples for future environment validation, not commands reported as s
 
 ## External inputs and paths
 
-Choose a separate working tree for data and generated products. The following is a **placement template**, not a bundled dataset or an automatically consumed configuration:
+Download and verify `core-experiment-inputs.tar.gz` as described in [DATA.md](DATA.md), then extract it into a separate working tree for data and generated products. Root SAbDab inputs and other resources outside this release must be supplied separately for workflows that need them. The following is a **placement template**, not a guarantee that every listed input is present or an automatically consumed configuration:
 
 ```text
 <external-workspace>/
@@ -111,16 +113,16 @@ Update path assignments in a separate execution copy without changing research t
 
 | Resource | Preparation requirement |
 | --- | --- |
-| SAbDab metadata for the root preprocessing notebooks | Source comments give the [legacy SAbDab URL](https://opig.stats.ox.ac.uk/webapps/sabdab-sabpred/sabdab/search/?all=true), which redirected during preparation to the current [SAbDab2 search page](https://sabdab.opig.stats.ox.ac.uk/search/?all=true). This does not identify the unknown historical snapshot; obtain the author-approved version separately. Required columns include `pdb`, `Hchain`, `Lchain`, `model`, `antigen_chain`, `antigen_type`. |
-| PDB complexes for the SAbDab branch | Supply structures matching that metadata. Original retrieval cells use `Bio.PDB.PDBList` and download into `/content/tmp`; do not execute them during the data-free checks. Record identifiers, retrieval dates, and checksums. |
+| SAbDab metadata for the root preprocessing notebooks | Root `data/` TSV files are outside this release and must be supplied separately. Source comments give the [legacy SAbDab URL](https://opig.stats.ox.ac.uk/webapps/sabdab-sabpred/sabdab/search/?all=true), which redirected during preparation to the current [SAbDab2 search page](https://sabdab.opig.stats.ox.ac.uk/search/?all=true). The original acquisition date and approved manuscript snapshot remain unresolved. Required columns include `pdb`, `Hchain`, `Lchain`, `model`, `antigen_chain`, `antigen_type`. |
+| PDB complexes for the SAbDab branch | Root `data/` PDB files are outside the core-data Release; supply structures matching the selected metadata and workflow separately. Original retrieval cells use `Bio.PDB.PDBList` and download into `/content/tmp`; do not execute them during the data-free checks. Record identifiers, retrieval dates where known, and checksums. |
 | AbDb PDBs for the `abdb_v2` branch | The preserved [abdb_v2/README.txt](../abdb_v2/README.txt) explicitly names [AbDb](http://www.abybank.org/abdb/) and records **“Kabat ==> NR”**. The URL timed out during preparation; current download availability was not verified. Exact snapshot, selection details, identifiers, and checksums remain unknown and need author confirmation. Do not substitute the SAbDab inputs merely because another branch uses them. |
-| SI-encoded PDBs and interaction tables | Author-supplied prepared inputs are needed for the reviewed `abdb_new_combine` workflow. Confirm that B-factors were intentionally used to store SI and identify how contact labels were generated. No approved download URL has been established. |
-| Folds and residue-patch text files | Obtain the exact five-fold definitions and positive/negative patch lists used by the selected experiment. Directory names are not evidence of a valid or disjoint evaluation split. |
+| SI-encoded PDBs and interaction tables | Existing prepared files under `abdb_new_combine/data/` are available through [DATA.md](DATA.md). Confirm that B-factors were intentionally used to store SI and identify how contact labels were generated; inclusion does not confirm correspondence with the selected manuscript workflow. |
+| Folds and residue-patch text files | The core-data Release preserves selected existing `abdb_v4` fold inputs; consult [DATA_FOLD_MEMBERSHIP.tsv](DATA_FOLD_MEMBERSHIP.tsv) and the file manifest. The source `abdb_v4/fold_2/data/` directory is empty and the required training CSV is missing. Directory names and preserved membership are not evidence of a valid or disjoint evaluation split. |
 | ESM weights | Obtain the selected model separately under its access conditions; loading a pretrained model may download weights. The code-only checks do not call pretrained loaders. |
 | Trained classifier weights | Supply the matching fold models or explicitly retrain after the protocol is confirmed. No classifier weights are bundled and no external download endpoint has been established. |
-| Example structures and figures | Historical examples refer to named PDB files and generated meshes/tables that are absent from this release. They are not ready-to-run fixtures. |
+| Example structures and figures | Consult the data manifest for available structures and tables. Meshes and generated figures are excluded from the core-data Release, and no example has been validated as a ready-to-run fixture. |
 
-Before a scientific run, record source URLs or author-provided transfer locations, versions, checksums, file schemas, and permitted use for each resource. The repository does not redistribute these materials.
+Before a scientific run, record source URLs or author-provided transfer locations, versions, checksums, file schemas, and permitted use for each resource. The core-data Release redistributes only the existing files listed in its manifests; missing resources and their provenance still need to be resolved for the selected workflow.
 
 ## Reviewed workflows
 
@@ -194,7 +196,7 @@ The per-file loop calls **`get_esm3_embedding()` without a definition or a seque
 2. Build and lock a compatible research environment for each selected stage. Record OS, Python, CPU/GPU, CUDA if used, package versions, and pretrained model versions. Do not reuse the lightweight validation lock as a training environment.
 3. Populate an external working tree with authorized, versioned inputs. Verify filenames, schemas, residue/chain mapping, embedding-column order, fold membership, and checksums before any deletion or overwrite cell is run.
 4. Open a working copy in Jupyter/Colab, reconcile every input/output path, and select the required cells. Do not run alternative blocks into the same output locations. Avoid `Run all` and unattended full-notebook execution.
-5. Validate one author-approved representative structure/sequence/patch path before larger processing. A representative fixture has not been supplied with this release; the synthetic smoke cases are not a substitute.
+5. Validate one author-approved representative structure/sequence/patch path before larger processing. No representative fixture has been validated for this release; the synthetic smoke cases are not a substitute.
 6. Run the selected preprocessing, embeddings, training, and evaluation stages while keeping fresh logs and outputs outside Git. Confirm the train/validation/test protocol independently and record any failures rather than silently treating skipped folds as success.
 7. Compare the approved outputs against the paper's stated results only after the manuscript, expected values, and exact protocol are available. Document discrepancies and any approved scientific fixes separately from packaging changes.
 

@@ -1,6 +1,6 @@
 # Notebook curation
 
-Prepared 96 source notebooks (2507 cells) for a code-only private repository. The original Google Drive files and local source archive were retained.
+The initial code-only preparation preserved 96 source notebooks (2507 cells) for the private repository. The original Google Drive files and local source archive were retained.
 
 Removed 2837 saved outputs, reset execution counts, and removed cell metadata and private/session notebook metadata, including Colab identifiers and stored widget state. Each notebook now has generic Python 3 kernel metadata, nbformat 4.5, and deterministic cell IDs. Existing Markdown and research code were retained.
 
@@ -26,4 +26,12 @@ Notebook schema validation passed for each prepared artifact. This curation proc
 
 The preparation tool refuses nonempty attachments, unreviewed metadata keys, or unknown notebook/cell extension fields rather than silently dropping potentially meaningful content. No such unreviewed content was discarded in this release.
 
-Datasets, model weights, generated scientific results, environment directories, and local curation tools are not publication inputs and are excluded from this code-only release.
+Datasets, model weights, generated scientific results, environment directories, and local curation tools were excluded from the initial code-only release.
+
+## Core-data update — 2026-11-08
+
+The [core-data Release](https://github.com/subcoldzhang/antigen_epitope/releases/tag/data-core-2026-11-08) adds one archive, `core-experiment-inputs.tar.gz`, while keeping data payloads out of Git history. It contains 1,261 existing files totaling 1,205,977,471 uncompressed bytes and 277,243,644 compressed bytes: 1,151 PDB files under `abdb_v3/pdb/`, 36 non-OBJ files under `abdb_new_combine/data/`, and 74 direct text/CSV inputs from the five `abdb_v4` folds. Historical SAbDab PDB/TSV/CSV files under the root `data/` directory, the approximately 80 GB mesh collection, NPY tensors, trained weights, and generated results are excluded from this update.
+
+[DATA.md](DATA.md) records acquisition and extraction instructions, [DATA_FILES.tsv](DATA_FILES.tsv) records per-file SHA-256 values for the 1,261 included files, and [DATA_FOLD_MEMBERSHIP.tsv](DATA_FOLD_MEMBERSHIP.tsv) records 4,834 preserved fold-directory memberships. These data manifests supplement the original notebook source manifest; they do not change its historical curation record.
+
+The source `abdb_v4/fold_2/data/` directory is empty and the required training CSV is missing. No replacement training data, fold allocation, or scientific output was generated to fill these gaps. File packaging and integrity checks do not establish experimental reproduction; the source and validation limitations above still apply.

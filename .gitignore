@@ -2,6 +2,7 @@
 .source-archive/
 .task-tools/
 .validation/
+.data-download/
 
 # Python/Jupyter and local environments.
 __pycache__/
@@ -34,7 +35,8 @@ outputs/
 .idea/
 .vscode/
 
-# Research inputs, trained weights and generated products stay outside Git.
+# Large research inputs are distributed through GitHub Releases; weights and
+# generated products stay outside Git. See docs/DATA.md for the core snapshot.
 *.csv
 *.tsv
 *.pdb
@@ -89,3 +91,8 @@ outputs/
 # Generated patch lists; retain documentation and source notebooks under data/.
 cnn_positive_patch_3points.txt
 cnn_negative_patch_3points_part*.txt
+/abdb_v4/fold_*/
+
+# Versioned core-data inventories (data payloads remain Release assets).
+!docs/DATA_FILES.tsv
+!docs/DATA_FOLD_MEMBERSHIP.tsv
